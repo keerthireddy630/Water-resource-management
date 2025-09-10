@@ -1,0 +1,15 @@
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json
+    temp = data['temperature']
+    precip = data['precipitation']
+    demand = data['water_demand']
+
+    features = pd.DataFrame({
+        'Temperature_C': [temp],
+        'Precipitation_mm': [precip],
+        'Water_Demand_MLD': [demand]
+    })
+
+    prediction = model.predict(features)[0]
+    return jsonify({'predicted_groundwater_level': round(prediction, 2)})
